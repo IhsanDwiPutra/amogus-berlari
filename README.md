@@ -67,19 +67,3 @@ Tanggal **[8 Januari 2026]**.
 
 ---
 *Terima kasih sudah mencoba game ini! Jangan lupa kasih Bintang (⭐) di repo ini ya!*
-
-
-
-
-
-
-
-
-
-
-
-
-
-🚧 **PROJECT UNDER CONSTRUCTION (SEDANG DIKERJAKAN)** 🚧
-
-Game ini masih dalam tahap pengembangan aktif. Fitur mungkin belum lengkap atau masih ada bug.
