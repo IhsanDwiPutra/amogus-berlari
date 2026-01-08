@@ -33,10 +33,11 @@ Hindari kaktus dan bertahanlah selama mungkin untuk mencetak Rekor Tertinggi!
 ## 📥 Cara Download & Main (Tanpa Install Python)
 Saya sudah menyediakan versi **Portable (.EXE)** agar bisa dimainkan di komputer mana saja tanpa perlu menginstall Python.
 
-1. Download file 'Amogus_Berlari.zip'.
-2. Ekstrak foldernya (Klik kanan -> Extract Here).
-3. Buka folder hasil ekstrak, cari file 'AmogusBerlari.exe'.
-4. Mainkan! 🚀
+1. Buka tab **[Releases]** di repository ini (sebelah kanan).
+2. Download file 'Amogus_Berlari.zip'.
+3. Ekstrak foldernya (Klik kanan -> Extract Here).
+4. Buka folder hasil ekstrak, cari file 'AmogusBerlari.exe'.
+5. Mainkan! 🚀
 
 ## 🛠️ Cara Menjalankan dari Source Code (Untuk Developer)
 Jika kamu ingin melihat kodingannya atau memodifikasinya, pastikan kamu sudah menginstall Python.
