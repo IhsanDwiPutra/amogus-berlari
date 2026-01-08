@@ -4,11 +4,16 @@ import random
 pygame.init()
 pygame.mixer.init()
 
+
 # --- Layar ---
 TITLE = "Amogus Berlari"
 WIDTH, HEIGHT = 800,600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption(TITLE)
+
+# --- Icon ---
+icon_game = pygame.image.load("image\\icon.ico")
+pygame.display.set_icon(icon_game)
 
 # --- Warna ---
 putih = (255, 255, 255)
@@ -71,9 +76,54 @@ class Musuh:
     def draw(self):
         screen.blit(self.gambar, self.rect)
 
+class Awan:
+    def __init__(self):
+        self.rect = pygame.Rect(WIDTH, 50, 60, 50)
+        self.speed = 5
+        
+        gambar_asli = pygame.image.load("image\\awan.png").convert_alpha()
+        self.gambar = pygame.transform.scale(gambar_asli, (150, 100))
+    
+    def update(self):
+        self.rect.x -= self.speed
+        
+        if self.rect.x < -150:
+            self.rect.x = random.randint(800, 1100)
+            self.rect.y = random.randint(50, 100)
+            self.speed = random.randint(1, 10)
+    
+    def draw(self):
+        screen.blit(self.gambar, self.rect)
+
+class BackgorundBerjalan:
+    def __init__(self):
+        gambar_asli = pygame.image.load("image\\gurun.jpg").convert_alpha()
+        self.gambar = pygame.transform.scale(gambar_asli, (802, 400))
+        
+        self.y = 100
+        self.x1 = 0
+        self.x2 = WIDTH
+        self.speed = 2
+    
+    def update(self):
+        self.x1 -= self.speed
+        self.x2 -= self.speed
+        
+        if self.x1 < -WIDTH:
+            self.x1 = WIDTH
+        
+        if self.x2 < -WIDTH:
+            self.x2 = WIDTH
+    
+    def draw(self):
+        screen.blit(self.gambar, (self.x1, self.y))
+        screen.blit(self.gambar, (self.x2, self.y))
+
 # --- Objek ---
 player = Player()
 kaktus = Musuh()
+awan1 = Awan()
+bg_jalan = BackgorundBerjalan()
 
 # --- Background ---
 gambar_asli_bg = pygame.image.load("image\\menu.png").convert_alpha()
@@ -97,6 +147,7 @@ main_font = pygame.font.Font(None, 36)
 
 # --- Skor ---
 skor = 0
+high_skor = 0
 
 # --- FPS ---
 time = pygame.time.Clock()
@@ -123,6 +174,7 @@ while running:
                     game_state = "main"
                     player = Player()
                     kaktus = Musuh()
+                    awan1 = Awan()
                     skor = 0
                     kalah_sound.stop()
                     # Gunakan fadeout biar tidak kaget
@@ -134,8 +186,10 @@ while running:
     
     # === Logika ===
     if game_state == "main":
+        bg_jalan.update()
         player.update()
         kaktus.update(skor)
+        awan1.update()
         
         skor += 1
         
@@ -143,32 +197,41 @@ while running:
             kalah_sound.play()
             game_state = "kalah"
             pygame.mixer.music.fadeout(500)
+            
+            if skor > high_skor:
+                high_skor = skor
     
     # === Gambar ===
-    if skor <= 2000:
-        screen.fill(putih)
-        skor_text = main_font.render(f"Skor: {skor}", True, hitam)
-    else:
-        screen.fill(hitam)
-        skor_text = main_font.render(f"Skor: {skor}", True, putih)
+    screen.fill(putih)
+    bg_jalan.draw()
+    skor_text = main_font.render(f"Skor: {skor}", True, hitam)
+    high_skor_text = main_font.render(f"High Skor: {high_skor}", True, hitam)
     
     kalah_text = kalah_font.render("GAME OVER", True, (255, 0, 0))
+    skor_anda_text = main_font.render(f"Skor Anda: {skor}", True, (255, 255, 0))
+    high_skor_end_text = main_font.render(f"Skor Tertinggi: {high_skor}", True, (255, 255, 0))
     
     if game_state == "menu":
         screen.blit(gambar_bg, (0, 0))
+        
+        # Efek Kedip
+        if pygame.time.get_ticks() % 1000 < 500:
+            tekan_spasi_text = main_font.render("Tekan Spasi untuk Mulai", True, hitam)
+            screen.blit(tekan_spasi_text, (250, 500))
     else:
-        player.draw()
+        bg_jalan.draw()
+        awan1.draw()
+        pygame.draw.rect(screen, (248, 247, 187), (0, 450, WIDTH, 200))
         kaktus.draw()
-        
-        if skor <= 2000:
-            pygame.draw.rect(screen, (116, 116, 116), (0, 450, WIDTH, 200))
-        else:
-            pygame.draw.rect(screen, putih, (0, 450, WIDTH, 200))
+        player.draw()
             
-        screen.blit(skor_text, (10, 10))
-        
-        if game_state == "kalah":
+        if game_state != "kalah":
+            screen.blit(skor_text, (10, 10))
+            screen.blit(high_skor_text, (600, 10))
+        else:
             screen.blit(kalah_text, (300, 200))
+            screen.blit(skor_anda_text, (300, 250))
+            screen.blit(high_skor_end_text, (300, 300))
     
     # === Logika Update ===
     pygame.display.flip()
